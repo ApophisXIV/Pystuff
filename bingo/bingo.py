@@ -1,28 +1,32 @@
 from random import randint
 
-def get_trimmed_lst_rnd(number_list,n):
-    for i in range(n): #N_NUMBERS
-       number_list.pop(randint(0,len(number_list)-1))
-    return number_list
+def select_rand_cols(number_list,n):
+    avaliable_index = [i for i in range(len(number_list)) if len(number_list[i]) > 0]
+    for i in range(n - 1):
+       avaliable_index.pop(randint(0,len(avaliable_index)-1))
+    return avaliable_index
 
-def random_row(max_cols):
-    row = []
-    index_with_number = get_trimmed_lst_rnd(list(range(max_cols+1)), 5)
-    for columns in index_with_number:
-        row.append(randint(1+10*columns,9+10*columns))
-    return row
-
-def fill_cardboard():
+def get_cardboard(pool):
     cardboard = []
-    for rows in range(3): #MAX_ROW
-        cardboard.append(random_row(9)) #MAX_COLUMNS
+    for rows in range(3):
+        row = []
+       
+        selected_cols = select_rand_cols(pool, 5)
+        for col in selected_cols:
+            choice = randint(0,len(pool[col]) - 1)
+            row.append(pool[col].pop(choice))
+
+        cardboard.append(row)
     return cardboard
 
-""" TODO: Format Cardboard
-def print_cardboard(raw_cardboard, rows, cols):
-    for i in range(rows):
-        for j in range(cols):
-            if(raw_cardboard[i][j] % j)
-"""
+def get_cardboards(n):
+    avaliable_numbers = []
+    for col in range(9):
+        avaliable_numbers.append(list(range(1 + 11 * col, 12 + 11 * col)))
+ 
+    cardboards = []
+    for i in range(n):
+        cardboards.append(get_cardboard(avaliable_numbers))
+    return cardboards
 
-print(fill_cardboard())
+print(get_cardboards(5))
